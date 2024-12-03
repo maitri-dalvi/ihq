@@ -1,24 +1,25 @@
 import { Schema, model, models } from "mongoose";
 
-const OrderSchema = new Schema({
+    const OrderSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
-        ref: "User",
-        required: true
+        ref: "User", 
+        required: true,
     },
     productOrdered: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId, 
+        ref: "Product",
+        required: true,
     },
     orderDate: {
         type: Date,
-        required: true
-    },
+        required: true,
+        default: Date.now, 
     orderQuantity: {
         type: Number,
-        required: true
-    }
-});
+        required: true,
+    },
+}});
 
 const Order = models.Order || model("Order", OrderSchema);
 

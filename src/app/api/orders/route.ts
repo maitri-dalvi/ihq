@@ -67,29 +67,33 @@ export const GET = async (request: Request) => {
 };
 
 
-
 export const POST = async (request: Request) => {
     try {
         const data = await request.json();
-        const { user, productOrdered, orderDate, orderQuantity } = data;
+        const { user, productOrdered, orderQuantity } = data;
 
-        if (!user || !productOrdered || !orderDate || !orderQuantity) {
+        if (!user || !productOrdered || !orderQuantity) {
             return new NextResponse(JSON.stringify({ message: "All fields are required" }), { status: 400 });
         }
 
         await dbConnect();
 
-        const product = await Product.findOne({ productName: productOrdered });
-
+        const product = await Product.findById(productOrdered);
         if (!product) {
             return new NextResponse(JSON.stringify({ message: "Product not found" }), { status: 404 });
         }
 
+        // Check stock availability
         if (product.stockQuantity < orderQuantity) {
             return new NextResponse(JSON.stringify({ message: "Insufficient stock" }), { status: 400 });
         }
 
-        const newOrder = new Order({ user, productOrdered, orderDate, orderQuantity });
+        const newOrder = new Order({
+            user,
+            productOrdered,
+            orderQuantity,
+            orderDate: new Date(),
+        });
         await newOrder.save();
 
         // Update stock quantity
@@ -101,7 +105,8 @@ export const POST = async (request: Request) => {
             { status: 201 }
         );
     } catch (error) {
-        return new NextResponse("Error in creating order", { status: 500 });
+        console.error("Error in POST method:", error);
+        return new NextResponse(JSON.stringify({ message: "Error in creating order" }), { status: 500 });
     }
 };
 
