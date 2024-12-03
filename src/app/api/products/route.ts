@@ -13,7 +13,7 @@ export const GET = async (request: Request) => {
 
         await dbConnect();
 
-        // To calculate total stock quantity for all products combined
+        // To Calculate total stock quantity for all products combined
         if (totalStock === "true") {
             const totalStockQuantity = await Product.aggregate([
                 { $group: { _id: null, totalStock: { $sum: "$stockQuantity" } } },

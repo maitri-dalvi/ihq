@@ -8,12 +8,10 @@ const ProductSchema = new Schema({
     category: {
         type: String,
         required: true,
-        unique: true
     },
     price: {
         type: Number,
         required: true,
-        unique: true
     },
     stockQuantity: {
         type: Number,
@@ -24,3 +22,5 @@ const ProductSchema = new Schema({
 const Product = models.Product || model("Product", ProductSchema);
 
 export default Product;
+
+

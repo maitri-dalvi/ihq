@@ -159,3 +159,44 @@ export const PATCH = async (request: Request) => {
         return new NextResponse("Error in updating order", { status: 500 });
     }
 };
+
+
+    export const DELETE = async (request: Request) => {
+        try {
+        const { searchParams } = new URL(request.url);
+        const orderId = searchParams.get("orderId");
+    
+        if (!orderId) {
+            return new NextResponse(JSON.stringify({ message: "orderId is required" }), { status: 400 });
+        }
+        if (!ObjectId.isValid(orderId)) {
+            return new NextResponse(JSON.stringify({ message: "Invalid orderId" }), { status: 400 });
+        }
+    
+        await dbConnect();
+    
+        const order = await Order.findById(orderId).populate("productOrdered");
+    
+        if (!order) {
+            return new NextResponse(JSON.stringify({ message: "Order not found" }), { status: 404 });
+        }
+    
+        const product = await Product.findById(order.productOrdered._id);
+        if (!product) {
+            return new NextResponse(JSON.stringify({ message: "Product not found" }), { status: 404 });
+        }
+    
+        product.stockQuantity += order.orderQuantity;
+        await product.save();
+    
+        await Order.findByIdAndDelete(orderId);
+    
+        return new NextResponse(
+            JSON.stringify({ message: "Order deleted successfully", orderId }),
+            { status: 200 }
+        );
+        } catch (error) {
+        console.error("Error in DELETE method:", error);
+        return new NextResponse(JSON.stringify({ message: "Error in deleting order" }), { status: 500 });
+        }
+    };
