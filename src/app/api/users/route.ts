@@ -2,8 +2,9 @@ import dbConnect from "@/lib/dbConnect"
 import User from "@/models/users";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
+import mongoose from "mongoose";
 
-const ObjectId = require('mongoose').Types.ObjectId;
+const ObjectId = mongoose.Types.ObjectId;
 
 export const GET = async () => {
     try {
@@ -12,7 +13,8 @@ export const GET = async () => {
         return new NextResponse(JSON.stringify(users), {status: 200});
 
     } catch (error) {
-        return new NextResponse("Error in fetching users", {status: 500});
+        console.error("Error in GET method:", error);
+        return new NextResponse(JSON.stringify({ message: "Error in fetching order" }), { status: 500 });
     }
 };
 
@@ -28,7 +30,8 @@ export const POST = async (request: Request) => {
         {status: 201});
 
     } catch (error) {
-        return new NextResponse("Error in creating user", {status: 500});
+        console.error("Error in POST method:", error);
+        return new NextResponse(JSON.stringify({ message: "Error in creating order" }), { status: 500 });
     }
 };
 
@@ -77,7 +80,8 @@ export const PATCH = async (request: Request) => {
     } 
     
     catch (error) {
-        return new NextResponse("Error in updating user", {status: 500}); 
+        console.error("Error in PATCH method:", error);
+        return new NextResponse(JSON.stringify({ message: "Error in updating order" }), { status: 500 });
     }
 };
 
@@ -126,7 +130,8 @@ export const DELETE = async (request: Request) => {
             status: 200
         }); 
     }   catch (error) {
-        return new NextResponse("Error in deleting user", {status: 500});
+        console.error("Error in DELETE method:", error);
+        return new NextResponse(JSON.stringify({ message: "Error in deleting order" }), { status: 500 });
     }
 };
 

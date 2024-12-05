@@ -1,6 +1,5 @@
 import dbConnect from "@/lib/dbConnect";
 import Order from "@/models/orders";
-import User from "@/models/users"; 
 import Product from "@/models/products";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
@@ -62,7 +61,8 @@ export const GET = async (request: Request) => {
         return new NextResponse(JSON.stringify({ message: "All orders", orders: allOrders }), { status: 200 });
 
     } catch (error) {
-        return new NextResponse("Error in fetching order", { status: 500 });
+        console.error("Error in GET method:", error);
+        return new NextResponse(JSON.stringify({ message: "Error in fetching order" }), { status: 500 });
     }
 };
 
@@ -156,7 +156,8 @@ export const PATCH = async (request: Request) => {
             { status: 200 }
         );
     } catch (error) {
-        return new NextResponse("Error in updating order", { status: 500 });
+        console.error("Error in UPDATE method:", error);
+        return new NextResponse(JSON.stringify({ message: "Error in updating order" }), { status: 500 });
     }
 };
 

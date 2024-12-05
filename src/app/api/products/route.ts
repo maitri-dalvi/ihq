@@ -45,7 +45,8 @@ export const GET = async (request: Request) => {
         const products = await Product.find({});
         return new NextResponse(JSON.stringify(products), { status: 200 });
     } catch (error) {
-        return new NextResponse("Error in fetching products", { status: 500 });
+        console.error("Error in GET method:", error);
+        return new NextResponse(JSON.stringify({ message: "Error in fetching product" }), { status: 500 });
     }
 };
 
@@ -63,7 +64,8 @@ export const POST = async (request: Request) => {
             { status: 201 }
         );
     } catch (error) {
-        return new NextResponse("Error in creating product", { status: 500 });
+        console.error("Error in POST method:", error);
+        return new NextResponse(JSON.stringify({ message: "Error in creating product" }), { status: 500 });
     }
 };
 
@@ -93,7 +95,8 @@ export const PATCH = async (request: Request) => {
             { status: 200 }
         );
     } catch (error) {
-        return new NextResponse("Error in updating product", { status: 500 });
+        console.error("Error in PATCH method:", error);
+        return new NextResponse(JSON.stringify({ message: "Error in updating product" }), { status: 500 });
     }
 };
 
@@ -123,6 +126,7 @@ export const DELETE = async (request: Request) => {
             { status: 200 }
         );
     } catch (error) {
-        return new NextResponse("Error in deleting product", { status: 500 });
+        console.error("Error in DELETE method:", error);
+        return new NextResponse(JSON.stringify({ message: "Error in deleting product" }), { status: 500 });
     }
 };
